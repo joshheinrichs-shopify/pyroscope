@@ -11,5 +11,7 @@ struct profile_key_t {
 };
 
 struct profile_bss_args_t {
-    __u32 tgid_filter; // 0 => profile everything
+	__u32 tgid_filter; // 0 => profile everything
+	__u64 ns_dev;
+	__u64 ns_ino;
 };

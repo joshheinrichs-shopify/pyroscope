@@ -209,8 +209,14 @@ func (s *Session) initArgs() error {
 	} else {
 		tgidFilter = uint32(s.pid)
 	}
+	nsStat := unix.Stat_t{}
+	if err = unix.Stat("/proc/self/ns/pid", &nsStat); err != nil {
+		return err
+	}
 	args := C.struct_profile_bss_args_t{
 		tgid_filter: C.uint(tgidFilter),
+		ns_dev:      C.__u64(nsStat.Dev),
+		ns_ino:      C.__u64(nsStat.Ino),
 	}
 	err = s.mapArgs.UpdateValueFlags(unsafe.Pointer(&zero), unsafe.Pointer(&args), 0)
 	if err != nil {

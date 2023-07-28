@@ -50,7 +50,7 @@ func RunEBPF(cfg *config.EBPF) error {
 
 	appName := CheckApplicationName(logger, cfg.ApplicationName, spy.EBPF, []string{})
 
-	var serviceDiscovery sd.ServiceDiscovery = sd.NoopServiceDiscovery{}
+	var serviceDiscovery sd.ServiceDiscovery = sd.NewCgroupServiceDiscovery()
 	if cfg.KubernetesNode != "" {
 		serviceDiscovery, err = sd.NewK8ServiceDiscovery(context.TODO(), logger, cfg.KubernetesNode)
 		if err != nil {

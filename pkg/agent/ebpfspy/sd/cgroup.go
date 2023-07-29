@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/pyroscope-io/pyroscope/pkg/agent/spy"
 )
@@ -31,7 +32,11 @@ func (sd *CgroupServiceDiscovery) GetLabels(pid uint32) *spy.Labels {
 	}
 
 	ls = spy.NewLabels()
-	ls.Set("cgroup", getCgroupFromPid(pid))
+	cgroup := getCgroupFromPid(pid)
+	// not right but close enough for now
+	unit := path.Base(cgroup)
+	ls.Set("cgroup", cgroup)
+	ls.Set("unit", unit)
 	sd.pid2Labels[pid] = ls
 
 	return ls
